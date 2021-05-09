@@ -13,10 +13,10 @@ jobs:
             sudo apt install python3-pip
             sudo pip3 install awsebcli --upgrade
       - run: cd ./app && npm install && npm run build
-    persist_to_workspace:
-      root: .
-      paths:
-        - .
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
   test:
     machine:
       image: ubuntu-2004:202010-01
@@ -25,10 +25,10 @@ jobs:
           at: .
       - checkout
       - run: cd ./app && npm run test
-    persist_to_workspace:
-      root: .
-      paths:
-        - .
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
   deploy:
     machine:
         image: ubuntu-2004:202010-01
