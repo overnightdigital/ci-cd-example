@@ -1,0 +1,52 @@
+version: 2.1
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: Installing AWS CLI
+          command: |
+            sudo apt-get update
+            sudo apt install python3-pip
+            sudo pip3 install awsebcli --upgrade
+      - run: cd ./app && npm install && npm run build
+    persist_to_workspace:
+      root: .
+      paths:
+        - .
+  test:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - attach_workspace:
+          at: .
+      - checkout
+      - run: cd ./app && npm run test
+    persist_to_workspace:
+      root: .
+      paths:
+        - .
+  deploy:
+    machine:
+        image: ubuntu-2004:202010-01
+    steps:
+      - attach_workspace:
+          at: .
+      - checkout
+      - run: aws s3 sync ./app/build s3://ci-cd-example
+    
+
+# Orchestrate our job run sequence
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
