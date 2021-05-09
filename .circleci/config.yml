@@ -39,9 +39,8 @@ jobs:
       - run: aws s3 sync ./app/build s3://ci-cd-example
     
 
-# Orchestrate our job run sequence
 workflows:
-  build_and_test:
+  build_test_deploy:
     jobs:
       - build
       - test:
