@@ -36,7 +36,7 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
-      - run: aws s3 sync ./app/build s3://ci-cd-example
+      - run: aws s3 sync ./app/build s3://awsinspectorkeys
     
 
 workflows:
