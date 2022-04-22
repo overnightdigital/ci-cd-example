@@ -49,3 +49,5 @@ workflows:
       - deploy:
           requires:
             - test
+          <<: *master_only
+          context: aws cli
