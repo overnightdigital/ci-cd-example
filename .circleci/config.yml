@@ -48,15 +48,13 @@ workflows:
   build_test_deploy:
 
     jobs:
-      - build:
-         <<: *master_only
+      - build
       - test:
           requires:
             - build
-          <<: *master_only
       - deploy:
           requires:
             - test
-          context: aws cli
           <<: *master_only
+          context: aws cli
 
