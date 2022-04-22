@@ -52,6 +52,7 @@ workflows:
       - test:
           requires:
             - build
+          <<: *master_only
       - deploy:
           requires:
             - test
