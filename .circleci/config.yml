@@ -1,5 +1,9 @@
 version: 2.1
-
+master_only: &master_only
+  filters:
+    branches:
+      only:
+        - master
 jobs:
   build:
     machine:
@@ -17,6 +21,7 @@ jobs:
           root: .
           paths:
             - .
+
   test:
     machine:
       image: ubuntu-2004:202010-01
@@ -36,11 +41,13 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
-      - run: aws s3 sync ./app/build s3://ci-cd-example
+      - run: aws s3 sync ./app/build s3://awsinspectorkeys
+                aws s3 sync ./app/build s3://circleciawsstoredata
     
 
 workflows:
   build_test_deploy:
+
     jobs:
       - build
       - test:
@@ -49,3 +56,6 @@ workflows:
       - deploy:
           requires:
             - test
+          <<: *master_only
+          context: aws cli
+
